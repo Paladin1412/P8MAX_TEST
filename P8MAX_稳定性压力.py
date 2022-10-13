@@ -7,12 +7,25 @@ import serial #导入模块
 import time
 import requests
 from datetime import datetime
-P8_timeout = 1
-Serial_num ='COM69'
+import inspect
+import tkinter.messagebox as msgbox   # 窗口
+
+P8_cookie_A = input('请输入智慧生活网页对应账号的cookie:')
+P8_SN =input('请输入设备SN. #必须是测试设备或加白设备:')
+Serial_num = input('请输入串口COM号, 例如"COM33":')
+P8_timeout = int(input('请输入接口访问,间隔, 反正我是1:'))
+print('===================================================================')
+print('日志自动保存在当前文件夹下,如出现段错误/重启/oom/我会弹窗提示你的')
+print('===================================================================')
+# _huid=111sJmTzBhjgifY9mw7YEZOgR8tZSdLDVqRn4o753i0Jo=; __guid=95498437.1213156474748100096.1665298430001.1028; online_ticket=OT-cb99b39c-235a-47ae-b5cf-b366e74ec844; Qs_lvt_369019=1665298430%2C1665370486; Qs_pv_369019=1685368794928168000%2C2737228500947096000%2C2094936792332145700%2C1510529706558163500%2C1069181371392656000; Q=u%3D360H3293566442%26n%3D%26le%3D%26m%3DZGtjWGWOWGWOWGWOWGWOWGWOAwL0%26qid%3D3293566442%26im%3D1_t01a6d072182d68691c%26src%3D360chrome_weixin%26t%3D1; T=s%3D9de7fbca26ebb26316ff577737e73691%26t%3D1660527054%26lm%3D%26lf%3D%26sk%3Dcc00bd94f0cb98a5d4bdf318c1cafdb3%26mt%3D1660527054%26rc%3D2%26v%3D2.0%26a%3D1; hasShowLiving=1; __DC_monitor_count=26; __DC_sid=123679891.1187142252985375000.1665641712097.414; IOT_MOCK=; __DC_gid=192758817.898550505.1665298430416.1665641807606.180
+
+# COM69
+
+
 class AIC():
     def __init__(self):    # 让类里面的每个方法都能调用
         self.ser = None
-        self.P8_cookie = '_huid=111sJmTzBhjgifY9mw7YEZOgR8tZSdLDVqRn4o753i0Jo=; __guid=95498437.1213156474748100096.1665298430001.1028; online_ticket=OT-cb99b39c-235a-47ae-b5cf-b366e74ec844; Qs_lvt_369019=1665298430%2C1665370486; Qs_pv_369019=1685368794928168000%2C2737228500947096000%2C2094936792332145700%2C1510529706558163500%2C1069181371392656000; Q=u%3D360H3293566442%26n%3D%26le%3D%26m%3DZGtjWGWOWGWOWGWOWGWOWGWOAwL0%26qid%3D3293566442%26im%3D1_t01a6d072182d68691c%26src%3D360chrome_weixin%26t%3D1; T=s%3D9de7fbca26ebb26316ff577737e73691%26t%3D1660527054%26lm%3D%26lf%3D%26sk%3Dcc00bd94f0cb98a5d4bdf318c1cafdb3%26mt%3D1660527054%26rc%3D2%26v%3D2.0%26a%3D1; hasShowLiving=1; __DC_monitor_count=26; __DC_sid=123679891.1187142252985375000.1665641712097.414; IOT_MOCK=; __DC_gid=192758817.898550505.1665298430416.1665641807606.180'
+        self.P8_cookie = P8_cookie_A
         self.url_SheZhi = 'https://iot.zyun.360.cn/iot/api/common/device/setProperty'
         self.url_service = 'https://iot.zyun.360.cn/iot/api/common/device/invokeService'
         self.P8_cookies ={
@@ -25,7 +38,7 @@ class AIC():
         # 高清
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"ClarityMode":1}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -36,7 +49,7 @@ class AIC():
         # 高清
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"ClarityMode":2}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -47,7 +60,7 @@ class AIC():
         # 2.5k
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"ClarityMode":5}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -60,7 +73,7 @@ class AIC():
         # 关闭
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"CustomCallIndicator":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -71,7 +84,7 @@ class AIC():
         # 开
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"CustomCallIndicator":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -85,7 +98,7 @@ class AIC():
         # 关闭
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DetectionSwitch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -96,7 +109,7 @@ class AIC():
         # 开
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DetectionSwitch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -110,7 +123,7 @@ class AIC():
         # 低
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DetectSensitivity":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -121,7 +134,7 @@ class AIC():
         # 中
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DetectSensitivity":1}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -132,7 +145,7 @@ class AIC():
         # 高
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DetectSensitivity":2}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -146,7 +159,7 @@ class AIC():
         # 100
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DeviceVolume":100}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -157,7 +170,7 @@ class AIC():
         # 50
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DeviceVolume":50}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -168,7 +181,7 @@ class AIC():
         # 0
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"DeviceVolume":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -182,7 +195,7 @@ class AIC():
         # 垂直翻转
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"ImageFlip":2}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -193,7 +206,7 @@ class AIC():
         # 水平翻转
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"ImageFlip":1}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -207,7 +220,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"Indicator":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -218,7 +231,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"Indicator":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -232,7 +245,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcMuteRecord":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -243,7 +256,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcMuteRecord":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -257,7 +270,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': 'IpcVoiceUpgrade":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -268,7 +281,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': 'IpcVoiceUpgrade":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -282,7 +295,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcVoiceWatch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -293,7 +306,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcVoiceWatch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -307,7 +320,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcWDRSwitch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -318,7 +331,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"IpcWDRSwitch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -332,7 +345,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MicSwitch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -343,7 +356,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MicSwitch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -357,7 +370,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MotionDetectSwitch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -368,7 +381,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MotionDetectSwitch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -382,7 +395,7 @@ class AIC():
         # di
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MotionDetectSensitivity":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -393,7 +406,7 @@ class AIC():
         # zhong
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MotionDetectSensitivity":1}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -404,7 +417,7 @@ class AIC():
         # gao
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"MotionDetectSensitivity":2}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -418,7 +431,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"Nightvision":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -429,8 +442,8 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
-            'items': '{"Nightvision":1',
+            'device_name': P8_SN,
+            'items': '{"Nightvision":1}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
         }
@@ -443,7 +456,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PromptVolume":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -454,7 +467,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PromptVolume":50}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -465,7 +478,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PromptVolume":100}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -479,7 +492,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PtzCruiseSwitch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -490,7 +503,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PtzCruiseSwitch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -504,7 +517,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PtzMotionTracking":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -515,7 +528,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"PtzMotionTracking":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -529,7 +542,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"Switch":false}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -540,7 +553,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"Switch":true}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -554,7 +567,7 @@ class AIC():
         # 关
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"TalkingVolume":0}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -565,7 +578,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"TalkingVolume":50}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -576,7 +589,7 @@ class AIC():
         # 干
         P8_body = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'items': '{"TalkingVolume":100}',
             'product_key': "2b7e7feff233",
             'seasAndInDomain': "inland"
@@ -589,7 +602,7 @@ class AIC():
     def P8_Install(self):
         P8_body_Install = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'identifier': "AiLabAction",
             'input_data': '{"Action":"Install","SkillId":"627011944199475200","SkillVersion":"1.0.0"}',
             'product_key': "2b7e7feff233",
@@ -600,7 +613,7 @@ class AIC():
         time.sleep(P8_timeout)
         P8_body_Install = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'identifier': "AiLabAction",
             'input_data': '{"Action":"Upgrade","SkillId":"627011944199475200","SkillVersion":"1.0.4"}',
             'product_key': "2b7e7feff233",
@@ -611,7 +624,7 @@ class AIC():
         time.sleep(P8_timeout)
         P8_body_Install = {
             'corp_id': "212",
-            'device_name': "86XCP8M12370000049",
+            'device_name': P8_SN,
             'identifier': "AiLabAction",
             'input_data': '{"Action":"Uninstall","SkillId":"627011944199475200","SkillVersion":"1.0.4"}',
             'product_key': "2b7e7feff233",
@@ -641,9 +654,10 @@ class AIC():
                             log.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' ' + c5)
                         if 'CPU: 0 PID' in c5:
                             print(f'{datetime.now()}:P8串口:OOM{c5}')
+                            t1.start()
                         if 'Out of memory' in c5:
                             print(f'{datetime.now()}P8串口:Out of memory:{c5}')
-
+                            t1.start()
                         if 'Ready sd upgrade' in c5:
                             print('P8MAX------------------------:进入回退版本流程,' + str(datetime.now()))
                             # break
@@ -651,17 +665,55 @@ class AIC():
                         #     print('P8MAX------------------------:回退完成,完成重启,' + str(datetime.now()))
                         if 'U-Boot SPL' in c5:
                             print('P8MAX------------------------:重启中,' + str(datetime.now()))
+                            t1.start()
                         if 'SIGSEGV' in c5:
                             print('P8MAX------------------------:断错误' + str(datetime.now()))
+                            t1.start()
                             # break
             # print('超时退出')
             self.ser.close()  # 关闭串口
         except Exception as e:
             print("---异常---：", e)
             pass
+
+    def Showinfo(self):
+        msgbox.showinfo('芭比Q', '串口异常打印啦')  # 弹窗提示
+
+
 AIC = AIC()
 i = 0
 t = threading.Thread(target=AIC.P8_Serial)
 t.start()
+t1 = threading.Thread(target=AIC.Showinfo)
+
 time.sleep(5)
+while True:
+    i+=1
+    print(f'\n===================={i}=================,{datetime.now()}')
+    try:
+        AIC.ClaritMode()
+        AIC.CustomCall()
+        AIC.DetectionSwitch()
+        AIC.DetectSensitivity()
+        AIC.DeviceVolume()
+        AIC.ImageFlip()
+        AIC.Indicator()
+        AIC.IpcMuteRecord()
+        AIC.IpcVoiceUpgrade()
+        AIC.IpcVoiceWatch()
+        AIC.IpcWDRSwitch()
+        AIC.MicSwitch()
+        AIC.MotionDetectSwitch()
+        AIC.MotionDetectSensitivity()
+        AIC.Nightvision()
+        AIC.PromptVolume()
+        AIC.PtzCruiseSwitch()
+        AIC.PtzMotionTracking()
+        AIC.Switch()
+        AIC.TalkingVolume()
+        AIC.P8_Install()
+    except:pass
+
+
+# print(inspect.getmembers(AIC,inspect.isfunction))
 

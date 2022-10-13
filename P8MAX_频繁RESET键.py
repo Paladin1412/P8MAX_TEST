@@ -56,7 +56,7 @@ class AIC():
                 print('P8MAX------------------------按键' + str(datetime.now()))
                 time.sleep(60)
             self.driver.back()
-        except:return  self.JXB() ,
+        except:return  self.JXB()
 
 
     def P8_Serial(self):

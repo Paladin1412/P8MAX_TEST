@@ -65,9 +65,9 @@ class openflow():
                 HS_time.append(time_HS)
                 New_time =datetime.now()
                 print(f'开始时间{New_time},本次APP开流耗时:{time_HS}s,平均开流耗时:{mean(HS_time)}s,最短耗时{min(HS_time)},10s内最长耗时:{max(HS_time)}')
-                time.sleep(15)
-                self.driver.back()
                 time.sleep(10)
+                self.driver.back()
+                time.sleep(5)
             except:
                 self.driver.back()
                 self.driver.back()
@@ -135,7 +135,7 @@ class openflow():
                     else:
                         # print(c5)
                         # print('open')
-                        with open('P8_开流_log.log', 'a', encoding='UTF-8', errors='ignore') as log:
+                        with open('P8_开流_log_标清.log', 'a', encoding='UTF-8', errors='ignore') as log:
                             log.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' ' + c5)
                         if 'CPU: 0 PID' in c5:
                             print(f'OOM:{c5}')
@@ -176,7 +176,7 @@ t = threading.Thread(target=aaaa.P8_Serial)
 t.start()
 time.sleep(5)
 # 安心家庭
-while i<=5000:
+while i<=250:
     i+=1
     print(f'======================第{i}次,=================\r')
     # aaaa.Serial_send()
