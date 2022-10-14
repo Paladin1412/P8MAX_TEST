@@ -650,7 +650,7 @@ class AIC():
                     else:
                         # print(c5)
                         # print('open')
-                        with open('P8_稳定性压力.log', 'a', encoding='UTF-8', errors='ignore') as log:
+                        with open('E:\Python_Projects\压测LOG\P8_稳定性压力.log', 'a', encoding='UTF-8', errors='ignore') as log:
                             log.writelines(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' ' + c5)
                         if 'CPU: 0 PID' in c5:
                             print(f'{datetime.now()}:P8串口:OOM{c5}')
